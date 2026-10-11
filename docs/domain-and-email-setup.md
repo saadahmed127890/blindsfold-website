@@ -1,48 +1,26 @@
-# BlindsFold domain and email setup
+# BlindsFold domain and email setup (Cloudflare Pages)
 
-Prepared 11 October 2026. Nothing has been purchased, deployed, pushed to GitHub, or changed in DNS.
+Prepared 11 October 2026. `blindsfold.com` is registered via Cloudflare Registrar, and `info@blindsfold.com` is configured using Cloudflare Email Routing.
 
-## Existing deployment inspected
+## Website Deployment: Cloudflare Pages
 
-The repository is a static site with eight HTML pages, shared CSS/JavaScript, and no package.json or compilation step. `vercel.json` enables trailing slashes and a one-year immutable cache for `/assets/*`. It contains no domain redirects, functions, or build overrides. The original repository homepage matched the publicly served homepage byte-for-byte. Canonical URLs, Open Graph URLs, structured data, robots.txt and sitemap.xml already use `https://blindsfold.com`.
+The repository is a static site with HTML pages, shared CSS/JavaScript, and static asset optimization via `_headers` and `_redirects`.
 
-The Vercel dashboard was not connected. Its project ID, production branch, framework/output overrides, current domain assignments and account plan remain unverified. Confirm these in the existing project; do not create a replacement project. For this repository, the expected setup is Other/static, repository root, no build command, and root output.
+For Cloudflare Pages deployment:
+1. **Repository & Framework:** Connect GitHub repository `blindsfold-website`. Build command: (None / empty). Build output directory: `/` (root directory).
+2. **Custom Domain:** Add `blindsfold.com` as primary domain under Pages -> Custom Domains. Add `www.blindsfold.com` with a 301 redirect to `blindsfold.com`.
+3. **DNS Automatic Configuration:** Cloudflare automatically updates the DNS `CNAME` / `ALIAS` records for `@` and `www` to point to Cloudflare Pages.
+4. **Email Routing DNS untouched:** Existing Cloudflare Email Routing DNS records (`MX` and `TXT` SPF records) remain active and untouched.
 
-## Attach the domain after purchase and approval
+## Business Email: info@blindsfold.com (Cloudflare Email Routing)
 
-1. Purchase `blindsfold.com` only after owner approval. Availability and registrar purchase/renewal price have not been verified.
-2. Open the Vercel project currently serving `blindsfold-website.vercel.app`, then Settings → Domains. Add `blindsfold.com` and `www.blindsfold.com` to Production.
-3. Keep the existing DNS provider. At its authoritative DNS zone, add the apex A record and www CNAME using the exact values Vercel displays for this project. Add a verification TXT record only if requested. Do not guess or reuse an old Vercel IP address.
-4. Make `blindsfold.com` the primary destination to match the existing canonical URLs. Configure `www.blindsfold.com` to redirect to it. Preserve the existing `blindsfold-website.vercel.app` assignment so the old address continues serving the site. A redirect from that hostname can be considered after the custom domain works; none is necessary to satisfy continued access.
-5. Wait for Vercel to verify DNS and issue HTTPS. Test apex, www, the old address, product paths, anchors, and the quote form. Confirm redirect paths and query strings survive.
+`info@blindsfold.com` is configured in Cloudflare Email Routing to forward to the destination email address.
 
-No code change is required to connect the domain. Do not push the homepage changes to a production-connected branch until deployment is approved; Git integration may auto-deploy on push.
+## Formspree Notification Routing
 
-Sources: [Vercel custom-domain setup](https://vercel.com/docs/domains/set-up-custom-domain), [domain assignment and redirects](https://vercel.com/docs/domains/working-with-domains/deploying-and-redirecting).
+- In Formspree dashboard, confirm the endpoint `https://formspree.io/f/mppzbjbk`.
+- Update the target notification email to `info@blindsfold.com`.
+- Formspree sends a verification email to `info@blindsfold.com`, which Cloudflare Email Routing forwards to the destination inbox.
+- Click the verification link to authorize `info@blindsfold.com`.
+- Submit a test quote from the live site to confirm end-to-end delivery.
 
-## Recommended inbox: Zoho Mail Lite, one user
-
-For one dedicated business inbox, my recommendation is Zoho Mail Lite with a real `hello@blindsfold.com` mailbox. It provides custom-domain email with web/mobile access and 5 GB or 10 GB mailbox options. Budget approximately **US$1 per user/month billed annually (US$12/year)** for the 5 GB tier, plus tax and domain registration/renewal. This is an indicative USD price, not a checkout quote; confirm local currency, region and current price before subscribing. The free tier has regional availability and client-access limitations, so do not base the business setup on its availability.
-
-Sources: [Zoho pricing](https://www.zoho.com/mail/zohomail-pricing.html), [official USD plan comparison](https://zpdfcreate-60047056813.catalystserverless.in/server/zpdfcreate/?countryCode=US&curtype=USD&env=live&lang=vi&pathname=zohomail-pricing.html&proname=mail).
-
-After subscription approval, add the domain in Zoho, verify ownership, and create the hello mailbox. The account owner should retain administrator access and set up MFA/recovery. Use the exact DNS values shown in that account's setup wizard; mail servers vary by data centre.
-
-| Type | Host | Value / purpose |
-| --- | --- | --- |
-| TXT | `@` | Zoho's unique domain-verification token |
-| MX | `@` | The regional mail hosts and priorities supplied by Zoho; US examples are `mx.zoho.com` (10), `mx2.zoho.com` (20), `mx3.zoho.com` (50) |
-| TXT | `@` | One SPF policy authorizing Zoho; documented example: `v=spf1 include:zohomail.com ~all`. Confirm the account's regional value. Merge other authorized senders into this single record if needed. |
-| TXT | `<selector>._domainkey` | DKIM public key generated by Zoho; verify and enable signing in its console |
-| TXT | `_dmarc` | Start with `v=DMARC1; p=none` while verifying mail authentication. This monitors rather than rejects spoofed mail; consider enforcement after all legitimate senders pass. |
-
-Website A/CNAME records and email MX/TXT records coexist. Preserve website records when adding email DNS. Replace competing MX records only when ready to switch mail routing. Keep just one SPF record.
-
-Sources: [Zoho email delivery/MX](https://www.zoho.com/mail/help/adminconsole/configure-email-delivery.html), [SPF](https://www.zoho.com/mail/help/adminconsole/spf-configuration.html), [DKIM](https://www.zoho.com/mail/help/adminconsole/dkim-configuration.html).
-
-## Verify before publishing the new email address
-
-- Send a real email to hello from an external provider and reply from hello. Check delivery, spam folders, and SPF/DKIM/DMARC results in message headers.
-- In Formspree, confirm the current endpoint `https://formspree.io/f/mppzbjbk` belongs to this business, then configure and verify hello as its notification recipient. Creating a mailbox does not automatically change Formspree notifications.
-- Submit one authorized test quote without a photo, and one with a photo if the Formspree plan supports uploads. Confirm dashboard receipt, notification delivery, reply-to behavior, and attachment access. A frontend success message alone does not establish email delivery.
-- Only after verification, replace the current Gmail address in HTML contact links and JavaScript fallback messages. It remains unchanged in this update to preserve a working contact route.

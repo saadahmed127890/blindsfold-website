@@ -31,7 +31,7 @@ Premium, mobile-first lead-generation website for **BlindsFold**, serving Winnip
 ## Contact details currently configured
 
 - Phone/Text: `431-788-5688`
-- Email: `awaisahmed4984@gmail.com`
+- Email: `info@blindsfold.com`
 - Service area: Winnipeg & surrounding areas
 
 These can be changed later by searching the project for the old value and replacing it.

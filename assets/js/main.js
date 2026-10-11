@@ -123,7 +123,7 @@
       }
 
       if (!config.formEndpoint) {
-        setStatus('Online quote delivery is not connected yet. Please call/text 431-788-5688 or email awaisahmed4984@gmail.com.', 'error');
+        setStatus('Online quote delivery is not connected yet. Please call/text 431-788-5688 or email info@blindsfold.com.', 'error');
         return;
       }
 
@@ -146,7 +146,7 @@
         submit.textContent = 'Sent';
         setTimeout(() => success?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
       } catch (error) {
-        setStatus('We could not send the quote request. Please call/text 431-788-5688 or email awaisahmed4984@gmail.com.', 'error');
+        setStatus('We could not send the quote request. Please call/text 431-788-5688 or email info@blindsfold.com.', 'error');
         submit.disabled = false;
         submit.textContent = 'Get My Free Quote';
       }

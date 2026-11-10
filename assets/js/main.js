@@ -28,7 +28,8 @@
     if (typeof window.clarity === 'function') window.clarity('event', eventName);
   }
   window.blindsfoldTrack = track;
-  loadAnalytics();
+  // Optional analytics remain off until their separate disclosures and consent are configured.
+  // GA4 and Clarity IDs are currently empty; do not enable these through ad consent.
 
   document.querySelectorAll('[data-event]').forEach((el) => {
     el.addEventListener('click', () => track(el.dataset.event, { label: el.dataset.eventLabel || el.textContent.trim() }));
@@ -59,6 +60,9 @@
     const success = form.querySelector('[data-success-card]');
     let current = 0;
     let started = false;
+    let pending = false;
+    let completed = false;
+    const submissionId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
 
     const show = (index) => {
       current = Math.max(0, Math.min(index, steps.length - 1));
@@ -108,18 +112,19 @@
     }, { once: false });
 
     next?.addEventListener('click', () => {
-      if (!validateStep()) return;
+      if (pending || completed || !validateStep()) return;
       track('quote_step_completed', { step: current + 1 });
       show(current + 1);
     });
-    back?.addEventListener('click', () => show(current - 1));
+    back?.addEventListener('click', () => { if (!pending && !completed) show(current - 1); });
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!validateStep()) return;
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+      if (pending || completed) return;
+      // Reveal invalid fields before reporting validity (earlier steps are hidden).
+      for (let i = 0; i < steps.length; i++) {
+        const invalid = [...steps[i].querySelectorAll('input, select, textarea')].find(field => !field.checkValidity());
+        if (invalid) { show(i); invalid.reportValidity(); return; }
       }
 
       if (!config.formEndpoint) {
@@ -127,7 +132,9 @@
         return;
       }
 
+      pending = true;
       submit.disabled = true;
+      if (back) back.disabled = true;
       submit.textContent = 'Sending…';
       setStatus('Sending your request…', 'success');
 
@@ -137,9 +144,13 @@
           body: new FormData(form),
           headers: { Accept: 'application/json' }
         });
-        if (!response.ok) throw new Error('Submission failed');
+        // Formspree documents HTTP success as acceptance for its JSON/AJAX endpoint.
+        if (!response.ok || response.redirected) throw new Error('Submission not confirmed');
+        completed = true;
 
-        track('quote_submitted');
+        // Tracking failures must never turn an accepted quote into a retry.
+        try { window.blindsfoldAdvertising?.lead(submissionId); } catch (_) {}
+        try { track('quote_submitted'); } catch (_) {}
         form.reset();
         setStatus('Thanks! We received your request.', 'success');
         success?.classList.add('is-visible');
@@ -149,6 +160,9 @@
         setStatus('We could not send the quote request. Please call/text 431-788-5688 or email info@blindsfold.com.', 'error');
         submit.disabled = false;
         submit.textContent = 'Get My Free Quote';
+      } finally {
+        pending = false;
+        if (back) back.disabled = completed;
       }
     });
 

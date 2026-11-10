@@ -1,3 +1,23 @@
+# November 2026 privacy and advertising update
+
+See `docs/ADVERTISING-READINESS.md` before publication. The privacy page is a review draft, and no deployment has been performed.
+
+This remains a static HTML/CSS/vanilla JavaScript site. Node 22+ is used only for dependency-free tests and packaging. Existing Formspree configuration is preserved.
+
+```sh
+npm test
+npm run lint
+npm run build
+```
+
+Set the public `META_PIXEL_ID` in the existing host’s build environment, use `npm run build`, and publish the `dist` directory. Without that variable, Pixel stays disabled. Never add an access token or secret as a Pixel ID. The script writes only the generated output, not the existing config or environment. For manual static uploads, run the build locally with the environment variable and upload the contents of `dist` through the existing host. Do not publish until owner review and the documented checks are complete.
+
+Preview with `python3 -m http.server 8765 --bind 127.0.0.1 --directory dist`.
+
+---
+
+## Original project notes (historical; consult the update above first)
+
 # BlindsFold Website — MVP v1
 
 Premium, mobile-first lead-generation website for **BlindsFold**, serving Winnipeg and surrounding areas.

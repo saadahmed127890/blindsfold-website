@@ -1,0 +1,9 @@
+{
+  "name": "blindsfold-website",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.cjs",
+    "lint": "node --check assets/js/main.js && node --check assets/js/advertising.js && node --check scripts/build.mjs"
+  }
+}

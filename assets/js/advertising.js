@@ -4,6 +4,7 @@
   const KEY = 'blindsfold.advertising.v1';
   const LIFETIME = 180 * 24 * 60 * 60 * 1000;
   const pixelId = String(window.BLINDSFOLD_PIXEL_ID || '');
+  const configured = /^\d+$/.test(pixelId);
   let choice = null;
   let initialized = false;
   let pageViewed = false;
@@ -76,6 +77,18 @@
   const accept = panel.querySelector('[data-accept]');
   const decline = panel.querySelector('[data-decline]');
   const close = panel.querySelector('[data-close]');
+  if (!configured) {
+    panel.innerHTML = '<div><h2 id="advertising-title">Advertising tracking is disabled</h2><p>Meta Pixel is not currently active on this website. <a href="/privacy-policy">Privacy Policy</a></p></div>';
+    const dismiss = document.createElement('button');
+    dismiss.type = 'button'; dismiss.className = 'btn btn--ghost'; dismiss.textContent = 'Close';
+    dismiss.addEventListener('click', () => { panel.hidden = true; opener?.focus(); });
+    panel.appendChild(dismiss);
+    panel.hidden = true;
+    document.querySelectorAll('[data-advertising-settings]').forEach(button => button.addEventListener('click', () => {
+      opener = button; panel.hidden = false; dismiss.focus();
+    }));
+    return;
+  }
   accept.addEventListener('click', () => choose('accepted'));
   decline.addEventListener('click', () => choose('declined'));
   close.addEventListener('click', () => { panel.hidden = true; opener?.focus(); });

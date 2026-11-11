@@ -19,8 +19,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" as="image" href="/assets/images/hero-vertical-blinds.webp" fetchpriority="high">
   <link rel="stylesheet" href="/assets/css/styles.css">
-  <script defer src="/assets/js/config.js"></script>
-  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/config.js?v=privacy-1"></script>
+  <link rel="stylesheet" href="/assets/css/privacy.css?v=1">
+  <script defer src="/assets/js/pixel-config.js?v=1"></script>
+  <script defer src="/assets/js/advertising.js?v=1"></script>
+  <script defer src="/assets/js/main.js?v=privacy-1"></script>
 </head>
 <body>
 
@@ -153,14 +156,14 @@
       </div>
       <div class="form-step">
         <h3>Optional: send a photo of the windows or room</h3>
-        <div class="upload-box"><div><input type="file" name="window_photo" accept="image/jpeg,image/png,image/webp"><p class="help">Optional. JPG, PNG or WebP. File delivery depends on the form service plan configured for the site.</p></div></div>
+        <div class="upload-box"><div><p>You can email photos to <a href="mailto:info@blindsfold.com">info@blindsfold.com</a> or text them to <a href="sms:+14317885688">431-788-5688</a> after sending your quote request.</p><p class="help">Include your name so we can match the photos to your request. Photos are optional; select Next to continue.</p></div></div>
       </div>
       <div class="form-step">
         <h3>Your contact details</h3>
         <div class="field"><label for="quote-name">Name</label><input class="input" id="quote-name" name="name" autocomplete="name" required></div>
         <div class="field"><label for="quote-phone">Phone</label><input class="input" id="quote-phone" name="phone" type="tel" autocomplete="tel" required></div>
         <div class="field"><label for="quote-email">Email</label><input class="input" id="quote-email" name="email" type="email" autocomplete="email" required></div>
-        <p class="help">By submitting, you’re asking BlindsFold to contact you about this quote request. No payment is collected on this website.</p>
+        <p class="help">By submitting this form, you agree that BlindsFold may contact you about your quote request. Learn how we handle your information in our <a href="/privacy-policy">Privacy Policy</a>.</p>
       </div>
       <input type="hidden" name="source" value="BlindsFold website quote funnel">
       <div class="form-nav">
@@ -202,7 +205,7 @@
         <details><summary>How long does an order usually take?</summary><p>Timelines depend on the selected style, availability and project size. We’ll give you the expected timing before you proceed.</p></details>
         <details><summary>Do you offer blackout blinds?</summary><p>Blackout and room-darkening options are part of the initial product range. Exact fabrics and configurations are confirmed during consultation.</p></details>
         <details><summary>Do you offer motorized blinds?</summary><p>Motorized blinds are included in the planned range. We’ll confirm available operating options for your specific windows.</p></details>
-        <details><summary>Can I send pictures of my windows first?</summary><p>Yes. The quote form is designed to support an optional photo once file upload is enabled, and you can also text photos to 431-788-5688.</p></details>
+        <details><summary>Can I send pictures of my windows first?</summary><p>Yes. Email photos to info@blindsfold.com or text them to 431-788-5688. Include your name so we can match them to your quote request.</p></details>
       </div>
     </div>
   </section>
@@ -230,7 +233,7 @@
   <div class="container">
     <div class="footer-grid">
       <a class="brand" href="/" aria-label="BlindsFold home"><span class="brand__name">Blinds<span>Fold</span></span><span class="brand__tag">Custom window coverings</span></a>
-      <nav class="footer-links" aria-label="Footer navigation"><a href="/">Home</a><a href="/blinds/">Blinds</a><a href="/#how-it-works">How It Works</a><a href="/about/">About</a><a href="/#faq">FAQ</a><a href="/contact/">Contact</a></nav>
+      <nav class="footer-links" aria-label="Footer navigation"><a href="/privacy-policy">Privacy Policy</a><button class="privacy-settings" type="button" data-advertising-settings>Advertising preferences</button><a href="/">Home</a><a href="/blinds/">Blinds</a><a href="/#how-it-works">How It Works</a><a href="/about/">About</a><a href="/#faq">FAQ</a><a href="/contact/">Contact</a></nav>
     </div>
     <div class="footer-bottom"><span>© 2026 BlindsFold. All rights reserved.</span><span>Serving Winnipeg &amp; surrounding areas.</span></div>
   </div>
